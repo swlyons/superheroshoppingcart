@@ -2,45 +2,60 @@
 <html>
 <head>
     <title>Super Hero Shopping Cart</title>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <!--<script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>-->
 	<script src="app.js"></script>
 	<style>
 		body {
-		background-color: red;
-		color: white;
+            background-color: red;
+            color: white;
 		}
-		#cart {
-		vertical-align: top;
-		}		
+        .buybutton{
+            background-color: aliceblue;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .deletebutton{
+            background-color: rosybrown;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 	</style>
 </head>
-<body>
-	<h1>Super Hero Shopping Cart</h1>
-	<table>
-	<tr>
-	<td>
-	<div style="background-color: white; color: black; width: 500px; height: 800px;">
-		<ul>
-			<li> <img width="40px" height="40px" src="https://d30y9cdsu7xlg0.cloudfront.net/png/122214-200.png"> Fire 300</li>
-			<li><img width="40px" height="40px" src="http://www.freeiconspng.com/uploads/fruits-in-ice-cube-icons-for-vista-xp-printbest-custom-glossy-online-16.gif">Ice 300</li>
-			<li><img width="40px" height="40px" src="http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-animals/012558-glossy-black-icon-animals-animal-bird2.png"> Flight 30000</li>
-			<li><img width="40px" height="40px" src="https://d30y9cdsu7xlg0.cloudfront.net/png/32318-200.png">Iron Man Suit 30000</li>
-			<li><img width="40px" height="40px" src="http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-sports-hobbies/044536-glossy-black-icon-sports-hobbies-people-karate.png">Bat Martial Arts 2000</li>
-			<li><img width="40px" height="40px" src="http://icons.iconarchive.com/icons/icons-land/medical/256/Documents-X-Ray-Hand-icon.png">X Ray Vision 10000</li>
-			<li><img width="40px" height="40px" src="http://www.iconsdb.com/icons/preview/black/batman-19-xxl.png">BatCave + Batmobile 15000</li>
-			<li><img width="40px" height="40px" src="https://cdn3.iconfinder.com/data/icons/healthy-and-fitness/512/Health-Fitness-Bodybuilding-big-arm-muscle-strong-512.png">Super Strength 30000</li>
-			<li><img width="40px" height="40px" src="https://d30y9cdsu7xlg0.cloudfront.net/png/52605-200.png">Wolverine Claws 50000</li>
-			<li><img width="40px" height="40px" src="http://vignette4.wikia.nocookie.net/half-life/images/6/64/PORTAL_icon.jpg/revision/latest?cb=20120419021539&path-prefix=en">Teleportation 3000</li>
-			<li><img width="40px" height="40px" src="https://d30y9cdsu7xlg0.cloudfront.net/png/85811-200.png">Super Speed 4000</li>
-			<li><img width="40px" height="40px" src="https://d30y9cdsu7xlg0.cloudfront.net/png/27545-200.png">Hammer with boomerang powers + destroys everything you swing it at + dna scan only you can use 10000</li>
-			<li><img width="40px" height="40px" src="http://www.iconarchive.com/download/i27082/ph03nyx/super-mario/Mushroom-Super.ico">Giant Mushroom- Makes you giant for 15 seconds 500</li>			
-	</div>
-	</td>
-	<td>
-	<img id="cart" align="left" width="30%" src="https://d30y9cdsu7xlg0.cloudfront.net/png/16757-200.png">
-	</td>
-</tr>	
-</table>
+<body ng-app="PowersShop" ng-controller="MainCtrl">
+	<h1 style="padding-left: 80px;">Super Hero Shopping Cart</h1>
+	<table style="padding-left: 100px;">
+        <tr>
+            <td style="vertical-align: top;">
+                <table style="border-collapse: collapse; background-color: white; color: black; width: 500px;">
+                    <tr ng-repeat="power in powerlist">
+                        <td style="border-bottom: 1px black solid;"><img width="40px" height="40px" src="{{power.imgurl}}"/>{{power.thename}}</td><td align="right" style="border-bottom: 1px black solid; padding-right: 5px">${{power.price}}&nbsp;&nbsp;&nbsp;<button ng-click="buy(power)" class="buybutton">Buy</button></td>
+                    </tr>
+                </table>
+            </td>
+            <td style="vertical-align: top; color: black;" align="right">
+                <figure>
+                    <img width="30%" src="https://d30y9cdsu7xlg0.cloudfront.net/png/16757-200.png"/>
+                    <figcaption>{{cart.length}}</figcaption>
+                </figure>
+                <!--&nbsp;&nbsp;&nbsp;<span style="color: black;">{{cart.length}}</span>-->
+            </td>
+            <td style="vertical-align: top;">
+                <table style="border-collapse: collapse; background-color: white; color: black; width: 500px;">
+                    <tr ng-repeat="power in cart track by $index">
+                        <td style="border-bottom: 1px black solid;"><img width="40px" height="40px" src="{{power.imgurl}}"/>{{power.thename}}</td><td align="right" style="border-bottom: 1px black solid; padding-right: 5px">${{power.price}}&nbsp;&nbsp;&nbsp;</span><button ng-click="delete(power)" class="deletebutton">Delete</button></td>
+                    </tr>
+                    <tr ng-if="cart.length">
+                        <td style="border-bottom: 1px black solid;">${{totalCost()}}</td><td align="right" style="border-bottom: 1px black solid; padding-right: 5px"><button ng-click="checkout()" class="buybutton">Checkout</button></td>
+                    </tr>
+                </table>
+                <span ng-if="checkoutb" style="color: black;">Don't worry we won't steal your money :)</span>
+            </td>
+        </tr>
+    </table>
 </body>
+
+
+
 </html>
 
